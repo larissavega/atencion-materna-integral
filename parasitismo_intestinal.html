@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>TRATAMIENTO ANTIPARASITARIO</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+  background: url("https://i.pinimg.com/1200x/fa/4d/2a/fa4d2a125651c8c36def1da487cb7835.jpg") no-repeat center center fixed;
+  background-size: cover;
+  margin: 0;
+  padding: 0;
+    }
+
+    .container {
+      max-width: 750px;
+      margin: 40px auto;
+      background: #ffffff;
+      padding: 25px 30px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: 600;
+      margin-top: 15px;
+      display: block;
+      color: #444;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    .edad-container {
+      display: flex;
+      gap: 10px;
+    }
+
+    .edad-input {
+      flex: 1;
+    }
+
+    input[type="checkbox"] {
+      width: auto;
+      transform: scale(1.2);
+      margin-right: 10px;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      font-weight: 600;
+      color: #444;
+      margin-bottom: 15px;
+    }
+
+    .resultado {
+      margin-top: 25px;
+      background-color: #e9f6ff;
+      padding: 20px;
+      border-left: 5px solid #0077b6;
+      border-radius: 8px;
+      white-space: pre-line;
+      color: #222;
+    }
+
+    .medicamento-info {
+      margin-top: 20px;
+      background-color: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 5px solid #28a745;
+    }
+
+    .medicamento-selector {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      width: 100%;
+    }
+
+    .presentacion-item {
+      margin-bottom: 10px;
+      padding: 10px;
+      background-color: #f1f8ff;
+      border-radius: 6px;
+    }
+
+    .dosis-calculo {
+      font-weight: bold;
+      color: #dc3545;
+    }
+
+    .alergias-container {
+      margin-top: 15px;
+    }
+
+    .alergias-select {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      margin-top: 5px;
+    }
+
+    .med-option {
+      display: flex;
+      justify-content: space-between;
+    }
+    .med-name {
+      font-weight: bold;
+    }
+    .med-details {
+      color: #666;
+      font-size: 0.9em;
+    }
+    .neonato-warning {
+      color: #d63384;
+      font-weight: bold;
+    }
+    .ml-calculo {
+      color: #28a745;
+      font-weight: bold;
+    }
+    .dosis-calculada {
+      background-color: #e8f5e9;
+      padding: 10px;
+      border-radius: 6px;
+      margin-top: 8px;
+      border-left: 4px solid #2e7d32;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h2>TRATAMIENTO ANTIPARASITARIO</h2>
+
+  <label for="tipoPaciente">Tipo de paciente:</label>
+  <select id="tipoPaciente" onchange="toggleCampos()">
+    <option value="adulto">Adulto</option>
+    <option value="niño">Niño</option>
+    <option value="neonato">Neonato (0-1 mes)</option>
+  </select>
+
+  <div id="edadContainer">
+    <label>Edad del paciente:</label>
+    <div class="edad-container">
+      <div class="edad-input" id="anosContainer">
+        <label for="edadAnos">Años:</label>
+        <input type="number" id="edadAnos" placeholder="Ej: 5" min="0" max="120" onchange="actualizarEdad()">
+      </div>
+      <div class="edad-input">
+        <label for="edadMeses" id="labelMeses">Meses:</label>
+        <input type="number" id="edadMeses" placeholder="Ej: 3" min="0" max="11" onchange="actualizarEdad()">
+      </div>
+    </div>
+  </div>
+
+  <div id="pesoInput" style="display:none;">
+    <label for="peso">Peso (kg):</label>
+    <input type="number" id="peso" placeholder="Ej: 12" step="0.1" min="0.1" onchange="mostrarTratamiento()">
+  </div>
+
+  <div id="embarazoInput" style="display:block;">
+    <label class="checkbox-label">
+      <input type="checkbox" id="embarazada" onchange="mostrarTratamiento()"> Paciente embarazada
+    </label>
+  </div>
+
+  <div id="alergiaInput" style="display:block;">
+    <label class="checkbox-label">
+      <input type="checkbox" id="alergico" onchange="toggleAlergias()"> Paciente con alergias conocidas
+    </label>
+    <div id="alergiasContainer" class="alergias-container" style="display:none;">
+      <label for="alergiasSelect">Seleccione medicamentos alergicos:</label>
+      <select id="alergiasSelect" class="alergias-select" multiple onchange="mostrarTratamiento()">
+        <option value="metronidazol">Metronidazol</option>
+        <option value="tinidazol">Tinidazol</option>
+        <option value="albendazol">Albendazol</option>
+        <option value="mebendazol">Mebendazol</option>
+        <option value="praziquantel">Praziquantel</option>
+        <option value="ivermectina">Ivermectina</option>
+        <option value="nitazoxanida">Nitazoxanida</option>
+        <option value="paromomicina">Paromomicina</option>
+        <option value="diiodohidroxiquinoleina">Diiodohidroxiquinoleina</option>
+        <option value="cloroquina">Cloroquina</option>
+        <option value="primaquina">Primaquina</option>
+        <option value="sulfadoxina">Sulfadoxina</option>
+        <option value="pirimetamina">Pirimetamina</option>
+        <option value="atovacuona">Atovacuona</option>
+        <option value="doxiciclina">Doxiciclina</option>
+        <option value="tetraciclina">Tetraciclina</option>
+      </select>
+    </div>
+  </div>
+
+  <label for="parasito">Parásito identificado:</label>
+  <select id="parasito" onchange="mostrarTratamiento()">
+    <option value="">-- Seleccione --</option>
+    <optgroup label="Protozoos">
+      <option value="entamoeba">Entamoeba histolytica</option>
+      <option value="giardia">Giardia lamblia</option>
+      <option value="cryptosporidium">Cryptosporidium</option>
+      <option value="trichomona">Trichomona vaginalis</option>
+      <option value="toxoplasma">Toxoplasma gondii</option>
+    </optgroup>
+    <optgroup label="Helmintos - Nematodos">
+      <option value="ascaris">Ascaris lumbricoides</option>
+      <option value="enterobius">Enterobius vermicularis</option>
+      <option value="uncinaria">Uncinarias (Ancylostoma/Necator)</option>
+      <option value="trichuris">Trichuris trichiura</option>
+      <option value="strongyloides">Strongyloides stercoralis</option>
+    </optgroup>
+    <optgroup label="Helmintos - Cestodos">
+      <option value="taenia_solium">Taenia solium</option>
+      <option value="taenia_saginata">Taenia saginata</option>
+    </optgroup>
+  </select>
+
+  <div class="resultado" id="resultadoTratamiento"></div>
+
+  <div id="selectorMedicamento" style="display:none;">
+    <label for="medicamentoSeleccionado">Seleccione medicamento:</label>
+    <select id="medicamentoSeleccionado" class="medicamento-selector" onchange="mostrarPresentaciones()">
+      <option value="">-- Seleccione medicamento --</option>
+    </select>
+
+    <div id="infoPresentaciones"></div>
+  </div>
+</div>
+
+<script>
+  // Base de datos completa de medicamentos con presentaciones ACTUALIZADA
+  const medicamentosDB = {
+    entamoeba: {
+      "Metronidazol (500mg tabletas)": {
+        presentaciones: [
+          { 
+            forma: "Tabletas", 
+            concentracion: "500 mg", 
+            tipo: "solido",
+            dosisAdulto: "500-750 mg cada 8h por 7-10 días", 
+            dosisNiño: "35-50 mg/kg/día dividido en 3 dosis por 7-10 días", 
+            dosisNeonato: "Consultar especialista", 
+            duracion: "7-10 días", 
+            notas: "Evitar en primer trimestre de embarazo",
+            efectosAdversos: "Náuseas, sabor metálico, orina oscura",
+            contraindicaciones: "Primer trimestre de embarazo"
+          },
+          { 
+            forma: "Jarabe", 
+            concentracion: "250 mg/5 ml", 
+            tipo: "liquido",
+            dosisAdulto: "15 ml cada 8h", 
+            dosisNiño: "35-50 mg/kg/día dividido en 3 dosis", 
+            dosisNeonato: "Consultar especialista", 
+            duracion: "7-10 días",
+            notas: "Sabor amargo, puede mezclarse con jugo",
+            efectosAdversos: "Sabor metálico, anorexia",
+            contraindicaciones: "Hipersensibilidad"
+          }
+        ]
+      },
+      "Tinidazol (500mg tabletas)": {
+        presentaciones: [
+          { 
+            forma: "Tabletas", 
+            concentracion: "500 mg", 
+            tipo: "solido",
+            dosisAdulto: "2 g una vez al día por 3-5 días", 
+            dosisNiño: "50 mg/kg/día una vez al día por 3-5 días", 
+            dosisNeonato: "No recomendado", 
+            duracion: "3-5 días", 
+            notas: "No usar en primer trimestre",
+            efectosAdversos: "Mareos, cefalea",
+            contraindicaciones: "Embarazo primer trimestre"
+          }
+        ]
+      },
+      "Paromomicina (250mg cápsulas)": {
+        presentaciones: [
+          { 
+            forma: "Cápsulas", 
+            concentracion: "250 mg", 
+            tipo: "solido",
+            dosisAdulto: "500 mg cada 8h por 7 días", 
+            dosisNiño: "25-35 mg/kg/día dividido en 3 dosis por 7 días", 
+            dosisNeonato: "No recomendado", 
+            duracion: "7 días", 
+            notas: "Seguro en embarazo",
+            efectosAdversos: "Náuseas, diarrea",
+            contraindicaciones: "Obstrucción intestinal"
+          }
+        ]
+      }
+    },
+    giardia: {
+      "Metronidazol (250mg tabletas)": {
+        presentaciones: [
+          { 
+            forma: "Tabletas", 
+            concentracion: "250 mg", 
+            tipo: "solido",
+            dosisAdulto: "250 mg cada 8h por 5-7 días", 
+            dosisNiño: "15 mg/kg/día dividido en 3 dosis por 5-7 días", 
+            dosisNeonato: "Consultar especialista", 
+            duracion: "5-7 días", 
+            notas: "Tratamiento estándar",
+            efectosAdversos: "Náuseas, cefalea",
+            contraindicaciones: "Primer trimestre"
+          }
+        ]
+      },
+      "Nitazoxanida (500mg tabletas)": {
+        presentaciones: [
+          { 
+            forma: "Tabletas", 
+            concentracion: "500 mg", 
+            tipo: "solido",
+            dosisAdulto: "500 mg cada 12h por 3 días", 
+            dosisNiño: "1-3 años: 100 mg cada 12h\n4-11 años: 200 mg cada 12h\n>12 años: 500 mg cada 12h", 
+            dosisNeonato: "No recomendado", 
+            duracion: "3 días", 
+            notas: "Seguro en niños >1 año",
+            efectosAdversos: "Dolor abdominal, diarrea",
+            contraindicaciones: "Menores de 1 año"
+          }
+        ]
+      },
+      "Albendazol (400mg tabletas)": {
+        presentaciones: [
+          { 
+            forma: "Tabletas", 
+            concentracion: "400 mg", 
+            tipo: "solido",
+            dosisAdulto: "400 mg/día por 5 días", 
+            dosisNiño: ">6 años: 400 mg/día por 5 días", 
+            dosisNeonato: "No recomendado", 
+            duracion: "5 días", 
+            notas: "Seguro en niños >2 años",
+            efectosAdversos: "Dolor abdominal, mareos",
+            contraindicaciones: "Embarazo"
+          }
+        ]
+      }
+    },
+    cryptosporidium: {
+      "Nitazoxanida (500mg tabletas)": {
+        presentaciones: [
+          { 
+            forma: "Tabletas", 
+            concentracion: "500 mg", 
+            tipo: "solido",
+            dosisAdulto: "500 mg cada 12h por 3 días", 
+            dosisNiño: "1-3 años: 100 mg cada 12h\n4-11 años: 200 mg cada 12h\n>12 años: 500 mg cada 12h", 
+            dosisNeonato: "No recomendado", 
+            duracion: "3 días", 
+            notas: "Tratamiento aprobado para Cryptosporidium en niños",
+            efectosAdversos: "Dolor abdominal, diarrea",
+            contraindicaciones: "Menores de 1 año"
+          }
+        ]
+      },
+      "Paromomicina (250mg cápsulas)": {
+        presentaciones: [
+          { 
+            forma: "Cápsulas", 
+            concentracion: "250 mg", 
+            tipo: "solido",
+            dosisAdulto: "500 mg cada 8h por 7 días", 
+            dosisNiño: "25-35 mg/kg/día dividido en 3 dosis por 7 días", 
+            dosisNeonato: "No recomendado", 
+            duracion: "7 días", 
+            notas: "Alternativa para pacientes inmunocomprometidos",
+            efectosAdversos: "Náuseas, diarrea",
+            contraindicaciones: "Obstrucción intestinal"
+          }
+        ]
+      }
+    },
+    trichomona: {
+      "Metronidazol (250mg tabletas)": {
+        presentaciones: [
+          { 
+            forma: "Tabletas", 
+            concentracion: "250 mg", 
+            tipo: "solido",
+            dosisAdulto: "2 g en dosis única o 500 mg cada 12h por 7 días", 
+            dosisNiño: "15 mg/kg/día dividido en 3 dosis por 7 días", 
+            dosisNeonato: "No recomendado", 
+            duracion: "1-7 días", 
+            notas: "Tratamiento de elección para tricomoniasis",
+            efectosAdversos: "Náuseas, sabor metálico, orina oscura",
+            contraindicaciones: "Primer trimestre de embarazo"
+          }
+        ]
+      },
+      "Tinidazol (500mg tabletas)": {
+        presentaciones: [
+          { 
+            forma: "Tabletas", 
+            concentracion: "500 mg", 
+            tipo: "solido",
+            dosisAdulto: "2 g en dosis única", 
+            dosisNiño: "50 mg/kg en dosis única", 
+            dosisNeonato: "No recomendado", 
+            duracion: "1 día", 
+            notas: "Alternativa al metronidazol",
+            efectosAdversos: "Mareos, cefalea",
+            contraindicaciones: "Embarazo primer trimestre"
+          }
+        ]
+      }
+    },
+    toxoplasma: {
+      "Pirimetamina (25mg tabletas)": {
+        presentaciones: [
+          { 
+            forma: "Tabletas", 
+            concentracion: "25 mg", 
+            tipo: "solido",
+            dosisAdulto: "50-75 mg/día + sulfadiazina 1-1.5 g cada 6h + ácido folínico 10-25 mg/día", 
+            dosisNiño: "1 mg/kg/día (máx 25 mg) + sulfadiazina 50 mg/kg cada 12h + ácido folínico 5-10 mg/día", 
+            dosisNeonato: "Consultar especialista", 
+            duracion: "3-6 semanas", 
+            notas: "Tratamiento para toxoplasmosis en inmunocomprometidos",
+            efectosAdversos: "Supresión de médula ósea, hepatotoxicidad",
+            contraindicaciones: "Embarazo (primer trimestre)"
+          }
+        ]
+      },
+      "Sulfadiazina (500mg tabletas)": {
+        presentaciones: [
+          { 
+            forma: "Tabletas", 
+            concentracion: "500 mg", 
+            tipo: "solido",
+            dosisAdulto: "1-1.5 g cada 6h", 
+            dosisNiño: "50 mg/kg cada 12h", 
+            dosisNeonato: "Consultar especialista", 
+            duracion: "3-6 semanas", 
+            notas: "Usar siempre con pirimetamina y ácido folínico",
+            efectosAdversos: "Erupciones cutáneas, cristaluria",
+            contraindicaciones: "Alergia a sulfas"
+          }
+        ]
+      }
+    },
+    ascaris: {
+      "Albendazol (400mg tabletas)": {
+        presentaciones: [
+          { 
+            forma: "Tabletas", 
+            concentracion: "400 mg", 
+            tipo: "solido",
+            dosisAdulto: "400 mg dosis única", 
+            dosisNiño: "400 mg dosis única (todas edades)", 
+            dosisNeonato: "Consultar especialista", 
+            duracion: "1 día", 
+            notas: "Tratamiento de elección",
+            efectosAdversos: "Dolor abdominal, mareos",
+            contraindicaciones: "Hipersensibilidad"
+          }
+        ]
+      },
+      "Mebendazol (100mg tabletas)": {
+        presentaciones: [
+          { 
+            forma: "Tabletas", 
+            concentracion: "100 mg", 
+            tipo: "solido",
+            dosisAdulto: "100 mg cada 12h por 3 días", 
+            dosisNiño: "100 mg cada 12h por 3 días (todas edades)", 
+            dosisNeonato: "No recomendado", 
+            duracion: "3 días", 
+            notas: "Alternativa al albendazol",
+            efectosAdversos: "Diarrea, dolor abdominal",
+            contraindicaciones: "Menores de 1 año"
+          }
+        ]
+      },
+      "Ivermectina (3mg tabletas)": {
+        presentaciones: [
+          { 
+            forma: "Tabletas", 
+            concentracion: "3 mg", 
+            tipo: "solido",
+            dosisAdulto: "150-200 mcg/kg dosis única", 
+            dosisNiño: "150-200 mcg/kg dosis única", 
+            dosisNeonato: "No recomendado", 
+            duracion: "1 día", 
+            notas: "Alternativa para ascariasis",
+            efectosAdversos: "Mareos, prurito",
+            contraindicaciones: "Meningitis, embarazo"
+          }
+        ]
+      }
+    },
+    enterobius: {
+      "Albendazol (400mg tabletas)": {
+        presentaciones: [
+          { 
+            forma: "Tabletas", 
+            concentracion: "400 mg", 
+            tipo: "solido",
+            dosisAdulto: "400 mg dosis única, repetir a las 2 semanas", 
+            dosisNiño: "400 mg dosis única, repetir a las 2 semanas", 
+            dosisNeonato: "No recomendado", 
+            duracion: "1 día", 
+            notas: "Eficacia >90%",
+            efectosAdversos: "Dolor abdominal, mareos",
+            contraindicaciones: "Hipersensibilidad"
+          }
+        ]
+      },
+      "Mebendazol (100mg tabletas)": {
+        presentaciones: [
+          { 
+            forma: "Tabletas", 
+            concentracion: "100 mg", 
+            tipo: "solido",
+            dosisAdulto: "100 mg dosis única, repetir a las 2 semanas", 
+            dosisNiño: "100 mg dosis única, repetir a las 2 semanas", 
+            dosisNeonato: "No recomendado", 
+            duracion: "1 día", 
+            notas: "Alternativa al albendazol",
+            efectosAdversos: "Diarrea, dolor abdominal",
+            contraindicaciones: "Menores de 1 año"
+          }
+        ]
+      },
+      "Pamoato de Pirantel (250mg/5ml suspensión)": {
+        presentaciones: [
+          { 
+            forma: "Suspensión", 
+            concentracion: "250 mg/5 ml", 
+            tipo: "liquido",
+            dosisAdulto: "11 mg/kg (máx 1 g) dosis única, repetir a las 2 semanas", 
+            dosisNiño: "11 mg/kg (máx 1 g) dosis única, repetir a las 2 semanas", 
+            dosisNeonato: "No recomendado", 
+            duracion: "1 día", 
+            notas: "Opción segura en embarazo",
+            efectosAdversos: "Náuseas, dolor abdominal",
+            contraindicaciones: "Hipersensibilidad"
+          }
+        ]
+      }
+    },
+    uncinaria: {
+      "Albendazol (400mg tabletas)": {
+        presentaciones: [
+          { 
+            forma: "Tabletas", 
+            concentracion: "400 mg", 
+            tipo: "solido",
+            dosisAdulto: "400 mg dosis única", 
+            dosisNiño: "400 mg dosis única", 
+            dosisNeonato: "No recomendado", 
+            duracion: "1 día", 
+            notas: "Tratamiento de elección para uncinarias",
+            efectosAdversos: "Dolor abdominal, mareos",
+            contraindicaciones: "Hipersensibilidad"
+          }
+        ]
+      },
+      "Mebendazol (100mg tabletas)": {
+        presentaciones: [
+          { 
+            forma: "Tabletas", 
+            concentracion: "100 mg", 
+            tipo: "solido",
+            dosisAdulto: "100 mg cada 12h por 3 días", 
+            dosisNiño: "100 mg cada 12h por 3 días", 
+            dosisNeonato: "No recomendado", 
+            duracion: "3 días", 
+            notas: "Alternativa al albendazol",
+            efectosAdversos: "Diarrea, dolor abdominal",
+            contraindicaciones: "Menores de 1 año"
+          }
+        ]
+      }
+    },
+    trichuris: {
+      "Albendazol (400mg tabletas)": {
+        presentaciones: [
+          { 
+            forma: "Tabletas", 
+            concentracion: "400 mg", 
+            tipo: "solido",
+            dosisAdulto: "400 mg/día por 3 días", 
+            dosisNiño: "400 mg/día por 3 días", 
+            dosisNeonato: "No recomendado", 
+            duracion: "3 días", 
+            notas: "Tratamiento de elección para tricuriasis",
+            efectosAdversos: "Dolor abdominal, mareos",
+            contraindicaciones: "Hipersensibilidad"
+          }
+        ]
+      },
+      "Mebendazol (100mg tabletas)": {
+        presentaciones: [
+          { 
+            forma: "Tabletas", 
+            concentracion: "100 mg", 
+            tipo: "solido",
+            dosisAdulto: "100 mg cada 12h por 3 días", 
+            dosisNiño: "100 mg cada 12h por 3 días", 
+            dosisNeonato: "No recomendado", 
+            duracion: "3 días", 
+            notas: "Alternativa al albendazol",
+            efectosAdversos: "Diarrea, dolor abdominal",
+            contraindicaciones: "Menores de 1 año"
+          }
+        ]
+      },
+      "Ivermectina (3mg tabletas)": {
+        presentaciones: [
+          { 
+            forma: "Tabletas", 
+            concentracion: "3 mg", 
+            tipo: "solido",
+            dosisAdulto: "200 mcg/kg/día por 3 días", 
+            dosisNiño: "200 mcg/kg/día por 3 días", 
+            dosisNeonato: "No recomendado", 
+            duracion: "3 días", 
+            notas: "Alternativa para tricuriasis",
+            efectosAdversos: "Mareos, prurito",
+            contraindicaciones: "Meningitis, embarazo"
+          }
+        ]
+      }
+    },
+    strongyloides: {
+      "Ivermectina (3mg tabletas)": {
+        presentaciones: [
+          { 
+            forma: "Tabletas", 
+            concentracion: "3 mg", 
+            tipo: "solido",
+            dosisAdulto: "200 mcg/kg/día por 2 días", 
+            dosisNiño: "200 mcg/kg/día por 2 días", 
+            dosisNeonato: "No recomendado", 
+            duracion: "2 días", 
+            notas: "Tratamiento de elección para estrongiloidiasis",
+            efectosAdversos: "Mareos, prurito",
+            contraindicaciones: "Meningitis, embarazo"
+          }
+        ]
+      },
+      "Albendazol (400mg tabletas)": {
+        presentaciones: [
+          { 
+            forma: "Tabletas", 
+            concentracion: "400 mg", 
+            tipo: "solido",
+            dosisAdulto: "400 mg cada 12h por 7 días", 
+            dosisNiño: "400 mg cada 12h por 7 días", 
+            dosisNeonato: "No recomendado", 
+            duracion: "7 días", 
+            notas: "Alternativa a ivermectina",
+            efectosAdversos: "Dolor abdominal, mareos",
+            contraindicaciones: "Hipersensibilidad"
+          }
+        ]
+      }
+    },
+    taenia_solium: {
+      "Praziquantel (600mg tabletas)": {
+        presentaciones: [
+          { 
+            forma: "Tabletas", 
+            concentracion: "600 mg", 
+            tipo: "solido",
+            dosisAdulto: "5-10 mg/kg dosis única", 
+            dosisNiño: "5-10 mg/kg dosis única", 
+            dosisNeonato: "No recomendado", 
+            duracion: "1 día", 
+            notas: "Tratamiento de elección para teniasis",
+            efectosAdversos: "Mareos, dolor abdominal",
+            contraindicaciones: "Cisticercosis ocular"
+          }
+        ]
+      },
+      "Niclosamida (500mg tabletas)": {
+        presentaciones: [
+          { 
+            forma: "Tabletas", 
+            concentracion: "500 mg", 
+            tipo: "solido",
+            dosisAdulto: "2 g masticados en dosis única", 
+            dosisNiño: "50 mg/kg (máx 2 g) en dosis única", 
+            dosisNeonato: "No recomendado", 
+            duracion: "1 día", 
+            notas: "Alternativa al praziquantel",
+            efectosAdversos: "Náuseas, dolor abdominal",
+            contraindicaciones: "Hipersensibilidad"
+          }
+        ]
+      }
+    },
+    taenia_saginata: {
+      "Praziquantel (600mg tabletas)": {
+        presentaciones: [
+          { 
+            forma: "Tabletas", 
+            concentracion: "600 mg", 
+            tipo: "solido",
+            dosisAdulto: "5-10 mg/kg dosis única", 
+            dosisNiño: "5-10 mg/kg dosis única", 
+            dosisNeonato: "No recomendado", 
+            duracion: "1 día", 
+            notas: "Tratamiento de elección para teniasis",
+            efectosAdversos: "Mareos, dolor abdominal",
+            contraindicaciones: "Cisticercosis ocular"
+          }
+        ]
+      },
+      "Niclosamida (500mg tabletas)": {
+        presentaciones: [
+          { 
+            forma: "Tabletas", 
+            concentracion: "500 mg", 
+            tipo: "solido",
+            dosisAdulto: "2 g masticados en dosis única", 
+            dosisNiño: "50 mg/kg (máx 2 g) en dosis única", 
+            dosisNeonato: "No recomendado", 
+            duracion: "1 día", 
+            notas: "Alternativa al praziquantel",
+            efectosAdversos: "Náuseas, dolor abdominal",
+            contraindicaciones: "Hipersensibilidad"
+          }
+        ]
+      }
+    }
+  };
+
+  // ===== FUNCIONES DE CÁLCULO =====
+  function calcularDosisLiquida(peso, dosisMgKg, concentracion) {
+    const [mg, ml] = concentracion.split(" mg/")[1].split(" ml")[0].split("/");
+    const mgPorMl = parseFloat(mg) / parseFloat(ml);
+    const dosisTotalMg = dosisMgKg * peso;
+    return (dosisTotalMg / mgPorMl).toFixed(2);
+  }
+
+  function calcularDosisMetronidazol(peso, presentacion) {
+    const dosisMinMgKg = 35;
+    const dosisMaxMgKg = 50;
+    
+    if (presentacion.tipo === "liquido") {
+      const dosisMinMl = calcularDosisLiquida(peso, dosisMinMgKg, presentacion.concentracion) / 3;
+      const dosisMaxMl = calcularDosisLiquida(peso, dosisMaxMgKg, presentacion.concentracion) / 3;
+      
+      return {
+        texto: `${dosisMinMl.toFixed(1)} - ${dosisMaxMl.toFixed(1)} ml cada 8h x 7-10 días`,
+        porToma: `${dosisMinMl.toFixed(1)} - ${dosisMaxMl.toFixed(1)} ml`,
+        frecuencia: "cada 8 horas",
+        duracion: "7-10 días"
+      };
+    }
+  }
+
+  // ===== FUNCIONES ORIGINALES MODIFICADAS =====
+  function toggleCampos() {
+    const tipo = document.getElementById('tipoPaciente').value;
+    document.getElementById('pesoInput').style.display = (tipo === 'niño' || tipo === 'neonato') ? 'block' : 'none';
+    document.getElementById('embarazoInput').style.display = (tipo === 'adulto') ? 'block' : 'none';
+    
+    if (tipo === 'neonato') {
+      document.getElementById('anosContainer').style.display = 'none';
+      document.getElementById('labelMeses').textContent = 'Edad (días):';
+      document.getElementById('edadMeses').placeholder = 'Ej: 15';
+      document.getElementById('edadMeses').max = '30';
+    } else {
+      document.getElementById('anosContainer').style.display = 'block';
+      document.getElementById('labelMeses').textContent = 'Meses:';
+      document.getElementById('edadMeses').placeholder = 'Ej: 3';
+      document.getElementById('edadMeses').max = '11';
+    }
+    
+    mostrarTratamiento();
+  }
+
+  function toggleAlergias() {
+    const alergico = document.getElementById('alergico').checked;
+    document.getElementById('alergiasContainer').style.display = alergico ? 'block' : 'none';
+    mostrarTratamiento();
+  }
+
+  function actualizarEdad() {
+    const tipo = document.getElementById('tipoPaciente').value;
+    if (tipo !== 'neonato') {
+      const meses = parseInt(document.getElementById('edadMeses').value) || 0;
+      if (meses > 11) {
+        document.getElementById('edadMeses').value = 11;
+      }
+    }
+    mostrarTratamiento();
+  }
+
+  function getEdadEnMeses() {
+    const tipo = document.getElementById('tipoPaciente').value;
+    if (tipo === 'neonato') {
+      return parseInt(document.getElementById('edadMeses').value) || 0;
+    } else {
+      const anos = parseInt(document.getElementById('edadAnos').value) || 0;
+      const meses = parseInt(document.getElementById('edadMeses').value) || 0;
+      return (anos * 12) + meses;
+    }
+  }
+
+  function mostrarTratamiento() {
+    const parasito = document.getElementById('parasito').value;
+    const tipo = document.getElementById('tipoPaciente').value;
+    const edadMeses = getEdadEnMeses();
+    const peso = parseFloat(document.getElementById('peso').value) || (tipo === 'neonato' ? 3.5 : 20);
+    const embarazada = document.getElementById('embarazada').checked;
+    const alergico = document.getElementById('alergico').checked;
+    const alergiasSelect = document.getElementById('alergiasSelect');
+    const alergias = alergico ? Array.from(alergiasSelect.selectedOptions).map(opt => opt.value) : [];
+
+    let info = "";
+    let advertencias = "";
+    let medicamentosDisponibles = [];
+
+    if (tipo === 'neonato') {
+      advertencias += "🚨 NEONATO: Muchos antiparasitarios están contraindicados o requieren ajuste especial en neonatos. Consulte con especialista.\n";
+    }
+
+    if (parasito === "entamoeba") {
+      info = `🦠 PARÁSITO: Entamoeba histolytica
+
+📌 Descripción:
+Parásito que puede causar colitis amebiana y abscesos hepáticos. Existe en formas de trofozoítos (invasivos) y quistes (forma de transmisión).
+
+💊 Tratamiento principal:
+- Metronidazol (enfermedad invasiva, protozooario)
+- Paromomicina sola (colonización asintomática)
+- furoato de diloxanida (forma quistica)
+
+📝 Consideraciones:
+- En embarazo: usar Paromomicina (evitar metronidazol en 1er trimestre)
+- Neonatos: consultar especialista`;
+
+      medicamentosDisponibles = ["Metronidazol (500mg tabletas)", "Tinidazol (500mg tabletas)", "Paromomicina (250mg cápsulas)"];
+      
+      if (embarazada) {
+        info += "\n\n🚑 PARA EMBARAZADAS:\n- Paromomicina es de elección\n- Evitar metronidazol en primer trimestre";
+        medicamentosDisponibles = ["Paromomicina (250mg cápsulas)"];
+      }
+    }
+    else if (parasito === "giardia") {
+      info = `🦠 PARÁSITO: Giardia lamblia
+
+📌 Descripción:
+Protozoo flagelado que infecta el duodeno y el intestino delgado. Más prevalente en niños que en adultos.
+
+💊 Tratamiento principal:
+- Metronidazol (tratamiento estándar)
+- Nitazoxanida (especialmente en niños)
+- Albendazol (alternativa)
+
+📝 Consideraciones:
+- En embarazo: usar Paromomicina
+- Tratar a toda la familia en casos recurrentes`;
+
+      medicamentosDisponibles = ["Metronidazol (500mg tabletas)", "Nitazoxanida (500mg tabletas)", "Albendazol (400mg tabletas)"];
+    }
+    else if (parasito === "cryptosporidium") {
+      info = `🦠 PARÁSITO: Cryptosporidium
+
+📌 Descripción:
+Protozoos intestinales formadores de esporas, importantes patógenos en huéspedes inmunodeficientes e inmunocompetentes.
+
+💊 Tratamiento principal:
+- Nitazoxanida (aprobada para diarrea por Cryptosporidium en niños)
+- Paromomicina (para pacientes inmunocomprometidos)
+
+📝 Consideraciones:
+- En pacientes con SIDA: restaurar función inmunitaria con antiretrovirales
+- Rehidratación oral o intravenosa esencial`;
+
+      medicamentosDisponibles = ["Nitazoxanida (500mg tabletas)", "Paromomicina (250mg cápsulas)"];
+    }
+    else if (parasito === "trichomona") {
+      info = `🦠 PARÁSITO: Trichomona vaginalis
+
+📌 Descripción:
+Protozoo flagelado que causa vaginitis en mujeres y uretritis en varones. Transmisión sexual.
+
+💊 Tratamiento principal:
+- Metronidazol (tratamiento de elección)
+- Tinidazol (alternativa en dosis única)
+
+📝 Consideraciones:
+- Tratar a ambas parejas sexuales
+- Evitar alcohol durante tratamiento
+- Evitar en primer trimestre de embarazo`;
+
+      medicamentosDisponibles = ["Metronidazol (500mg tabletas)", "Tinidazol (500mg tabletas)"];
+    }
+    else if (parasito === "toxoplasma") {
+      info = `🦠 PARÁSITO: Toxoplasma gondii
+
+📌 Descripción:
+Protozoo intracelular obligado. Infección aguda, congénita o en inmunodeprimidos (encefalitis).
+
+💊 Tratamiento principal:
+- Pirimetamina + Sulfadiazina + Ácido folínico
+- En embarazadas: Espiramicina para prevenir transmisión al feto
+
+📝 Consideraciones:
+- En inmunocompetentes suele ceder espontáneamente
+- En SIDA requiere tratamiento prolongado y mantenimiento`;
+
+      medicamentosDisponibles = ["Pirimetamina (25mg tabletas)", "Sulfadiazina (500mg tabletas)"];
+    }
+    else if (parasito === "ascaris") {
+      info = `🦠 PARÁSITO: Ascaris lumbricoides
+
+📌 Descripción:
+Nematodo (gusano redondo) que habita en la luz del intestino delgado. Transmisión fecal-oral.
+
+💊 Tratamiento principal:
+- Albendazol 400 mg dosis única (todas edades)
+- Mebendazol 100 mg cada 12h x 3 días
+- Ivermectina como alternativa
+
+📝 Consideraciones:
+- Tratar a toda la familia
+- Mejorar condiciones sanitarias
+- Prevalente en áreas con malas condiciones socioeconómicas`;
+
+      medicamentosDisponibles = ["Albendazol (400mg tabletas)", "Mebendazol (100mg tabletas)", "Ivermectina (3mg tabletas)"];
+    }
+    else if (parasito === "enterobius") {
+      info = `🦠 PARÁSITO: Enterobius vermicularis (oxiuros)
+
+📌 Descripción:
+Nematodo pequeño (1 cm) que habita en ciego, apéndice y áreas adyacentes. Migración nocturna al área perianal.
+
+💊 Tratamiento principal:
+- Albendazol 400 mg dosis única (repetir a las 2 semanas)
+- Mebendazol 100 mg dosis única (repetir a las 2 semanas)
+- Pamoato de Pirantel como alternativa
+
+📝 Consideraciones:
+- Tratar a toda la familia simultáneamente
+- Higiene estricta (lavado de manos, ropa interior)
+- Más común en niños 5-14 años`;
+
+      medicamentosDisponibles = ["Albendazol (400mg tabletas)", "Mebendazol (100mg tabletas)", "Pamoato de Pirantel (250mg/5ml suspensión)"];
+    }
+    else if (parasito === "uncinaria") {
+      info = `🦠 PARÁSITO: Uncinarias (Ancylostoma/Necator)
+
+📌 Descripción:
+Nematodos que causan pérdida sanguínea intestinal (0.2 ml/día/gusano). Transmisión por penetración de larvas a través de la piel.
+
+💊 Tratamiento principal:
+- Albendazol 400 mg dosis única
+- Mebendazol 100 mg cada 12h x 3 días
+
+📝 Consideraciones:
+- Puede causar anemia ferropénica
+- Prevalente en áreas rurales con suelos húmedos
+- Mejorar calzado y condiciones sanitarias`;
+
+      medicamentosDisponibles = ["Albendazol (400mg tabletas)", "Mebendazol (100mg tabletas)"];
+    }
+    else if (parasito === "trichuris") {
+      info = `🦠 PARÁSITO: Trichuris trichiura (tricocéfalo)
+
+📌 Descripción:
+Nematodo con forma de látigo que habita en cego y colon ascendente. Puede causar disentería crónica y anemia.
+
+💊 Tratamiento principal:
+- Albendazol 400 mg/día x 3 días
+- Mebendazol 100 mg cada 12h x 3 días
+- Ivermectina como alternativa
+
+📝 Consideraciones:
+- Más común en áreas rurales con suelos contaminados
+- Puede causar retraso en crecimiento y desarrollo cognitivo
+- Higiene de manos y alimentos esencial`;
+
+      medicamentosDisponibles = ["Albendazol (400mg tabletas)", "Mebendazol (100mg tabletas)", "Ivermectina (3mg tabletas)"];
+    }
+    else if (parasito === "strongyloides") {
+      info = `🦠 PARÁSITO: Strongyloides stercoralis
+
+📌 Descripción:
+Nematodo con ciclo autoinfeccioso que puede persistir por décadas. Riesgo de hiperinfección en inmunodeprimidos.
+
+💊 Tratamiento principal:
+- Ivermectina 200 mcg/kg/día x 2 días
+- Albendazol como alternativa (400 mg cada 12h x 7 días)
+
+📝 Consideraciones:
+- En inmunodeprimidos requiere tratamiento prolongado
+- Evaluar respuesta con exámenes seriados
+- Puede causar síndrome de hiperinfección mortal`;
+
+      medicamentosDisponibles = ["Ivermectina (3mg tabletas)", "Albendazol (400mg tabletas)"];
+    }
+    else if (parasito === "taenia_solium") {
+      info = `🦠 PARÁSITO: Taenia solium
+
+📌 Descripción:
+Cestodo (gusano plano) que puede causar teniasis intestinal o cisticercosis (SNC, ojos, tejidos).
+
+💊 Tratamiento principal:
+- Praziquantel 5-10 mg/kg dosis única
+- Niclosamida como alternativa
+
+📝 Consideraciones:
+- En cisticercosis requiere manejo especializado
+- Evitar praziquantel en cisticercosis ocular
+- Cocer bien la carne de cerdo`;
+
+      medicamentosDisponibles = ["Praziquantel (600mg tabletas)", "Niclosamida (500mg tabletas)"];
+    }
+    else if (parasito === "taenia_saginata") {
+      info = `🦠 PARÁSITO: Taenia saginata
+
+📌 Descripción:
+Cestodo (gusano plano) que causa teniasis intestinal. No produce cisticercosis humana.
+
+💊 Tratamiento principal:
+- Praziquantel 5-10 mg/kg dosis única
+- Niclosamida como alternativa
+
+📝 Consideraciones:
+- Cocer bien la carne de res
+- Identificar proglótides en heces para diagnóstico
+- Puede causar molestias abdominales inespecíficas`;
+
+      medicamentosDisponibles = ["Praziquantel (600mg tabletas)", "Niclosamida (500mg tabletas)"];
+    }
+
+    // Filtrar por alergias si es necesario
+    if (alergico && alergias.length > 0) {
+      medicamentosDisponibles = medicamentosDisponibles.filter(med => {
+        const medBase = med.toLowerCase();
+        return !alergias.some(alergia => medBase.includes(alergia));
+      });
+      
+      if (medicamentosDisponibles.length === 0) {
+        advertencias += "\n⚠️ No hay opciones disponibles considerando las alergias seleccionadas. Considere desensibilización o consulte especialista.";
+      } else {
+        info += "\n\n⚠️ OPCIONES SEGURAS CONSIDERANDO ALERGIAS:";
+      }
+    }
+
+    document.getElementById("resultadoTratamiento").textContent = info + (advertencias ? "\n\n" + advertencias : "") || "Seleccione un parásito para ver el tratamiento.";
+
+    // Actualizar selector de medicamentos
+    const selector = document.getElementById("medicamentoSeleccionado");
+    selector.innerHTML = '<option value="">-- Seleccione medicamento --</option>';
+    
+    if (parasito && medicamentosDB[parasito] && medicamentosDisponibles.length > 0) {
+      document.getElementById("selectorMedicamento").style.display = "block";
+      
+      medicamentosDisponibles.forEach(medKey => {
+        if (medicamentosDB[parasito][medKey]) {
+          const medData = medicamentosDB[parasito][medKey];
+          const primeraPresentacion = medData.presentaciones[0];
+          const option = document.createElement("option");
+          option.value = medKey;
+          
+          option.textContent = `${medKey.split("(")[0].trim()} (${primeraPresentacion.concentracion}) - ${tipo === 'niño' ? primeraPresentacion.dosisNiño.split("\n")[0] : primeraPresentacion.dosisAdulto.split("\n")[0]}`;
+          
+          selector.appendChild(option);
+        }
+      });
+    } else {
+      document.getElementById("selectorMedicamento").style.display = "none";
+      document.getElementById("infoPresentaciones").innerHTML = "";
+    }
+  }
+function calcularDosisMetronidazol(peso, presentacion) {
+  const dosisMinMgKg = 35;
+  const dosisMaxMgKg = 50;
+
+  const concentracionTexto = presentacion.concentracion; // ej: "250 mg/5 ml"
+  const [mgParte, mlParte] = concentracionTexto.split("mg/").map(s => s.trim().replace("ml", ""));
+  const mg = parseFloat(mgParte);
+  const ml = parseFloat(mlParte);
+  const mgPorMl = mg / ml;
+
+  const dosisMinMgDia = peso * dosisMinMgKg;
+  const dosisMaxMgDia = peso * dosisMaxMgKg;
+
+  const mlDiaMin = dosisMinMgDia / mgPorMl;
+  const mlDiaMax = dosisMaxMgDia / mgPorMl;
+
+  const mlTomaMin = mlDiaMin / 3;
+  const mlTomaMax = mlDiaMax / 3;
+
+  const mlTomaMinStr = mlTomaMin.toFixed(1);
+  const mlTomaMaxStr = mlTomaMax.toFixed(1);
+
+  return {
+    texto: `${mlTomaMinStr}-${mlTomaMaxStr} ml cada 8h por 7-10 días`,
+    porToma: `${mlTomaMinStr}-${mlTomaMaxStr} ml`,
+    frecuencia: "cada 8 horas",
+    duracion: "7-10 días",
+    indicacion: `Metronidazol suspensión ${presentacion.concentracion}, dar ${mlTomaMinStr}-${mlTomaMaxStr} ml cada 8h por 7-10 días.`
+  };
+}
+  function mostrarPresentaciones() {
+    const parasito = document.getElementById('parasito').value;
+    const medicamento = document.getElementById('medicamentoSeleccionado').value;
+    const tipo = document.getElementById('tipoPaciente').value;
+    const peso = parseFloat(document.getElementById('peso').value) || (tipo === 'neonato' ? 3.5 : 20);
+    const edadMeses = getEdadEnMeses();
+    
+    const presentacionesContainer = document.getElementById("infoPresentaciones");
+    presentacionesContainer.innerHTML = "";
+    
+    if (parasito && medicamento && medicamentosDB[parasito] && medicamentosDB[parasito][medicamento]) {
+      const presentaciones = medicamentosDB[parasito][medicamento].presentaciones;
+      
+      presentaciones.forEach(pres => {
+        const item = document.createElement("div");
+        item.className = "presentacion-item";
+        
+        let dosisInfo = "";
+
+        
+        if (tipo === 'neonato') {
+          dosisInfo = `<span class="dosis-calculo">Dosis neonatal: ${pres.dosisNeonato}</span>`;
+          if (pres.dosisNeonato === "No recomendado") {
+            dosisInfo = `<span class="neonato-warning">NO RECOMENDADO PARA NEONATOS</span>`;
+          } else if (pres.dosisNeonato.includes("mg/kg") && peso > 0) {
+            const dosisMgKg = parseFloat(pres.dosisNeonato.split("mg/kg")[0].split(" ").pop());
+            const dosisTotal = (dosisMgKg * peso).toFixed(2);
+            dosisInfo += `<br><span class="dosis-calculo">Para ${peso} kg: ${dosisTotal} mg por dosis</span>`;
+            
+            if (pres.tipo === "liquido") {
+              const mlPorDosis = calcularDosisLiquida(peso, dosisMgKg, pres.concentracion);
+              dosisInfo += `<br><span class="ml-calculo">Equivale a: ${mlPorDosis} ml por dosis (${pres.concentracion})</span>`;
+            }
+          }
+        } 
+        else if (tipo === 'niño') {
+          dosisInfo = `<span class="dosis-calculo">Dosis pediátrica: ${pres.dosisNiño.replace(/\n/g, "<br>")}</span>`;
+          
+          // CÁLCULO AUTOMÁTICO PARA NIÑOS
+          if (peso > 0) {
+        // Metronidazol - Cálculo especial solo para jarabe
+        if (medicamento.includes("Metronidazol") && pres.forma === "Jarabe") {
+          const calculo = calcularDosisMetronidazol(peso, pres);
+              
+              dosisInfo += `
+                <div class="dosis-calculada">
+                  <strong>DOSIS CALCULADA PARA ${peso} kg:</strong><br>
+                  ${calculo.texto}<br>
+                  <strong>Administrar:</strong> ${calculo.porToma} ${calculo.frecuencia}<br>
+                  <strong>Duración:</strong> ${calculo.duracion}
+                </div>`;
+            }
+            // Otros medicamentos líquidos
+            else if (pres.tipo === "liquido" && pres.dosisNiño.includes("mg/kg")) {
+              const dosisMgKg = parseFloat(pres.dosisNiño.split("mg/kg")[0].split(" ").pop());
+              const dosisTotal = (dosisMgKg * peso).toFixed(1);
+              dosisInfo += `<br><span class="dosis-calculo">Para ${peso} kg: ${dosisTotal} mg por dosis</span>`;
+              
+              const mlPorDosis = calcularDosisLiquida(peso, dosisMgKg, pres.concentracion);
+              const frecuencia = pres.dosisNiño.includes("dividido en") ? pres.dosisNiño.split("dividido en")[1] : "consultar";
+              
+              dosisInfo += `
+                <div class="dosis-calculada">
+                  <strong>DOSIS CALCULADA PARA ${peso} kg:</strong><br>
+                  ${mlPorDosis} ml por dosis (${pres.concentracion})<br>
+                  <strong>Frecuencia:</strong> ${frecuencia}
+                </div>`;
+            }
+            // Medicamentos sólidos con dosis por kg
+            else if (pres.tipo === "solido" && pres.dosisNiño.includes("mg/kg")) {
+              const dosisMgKg = parseFloat(pres.dosisNiño.split("mg/kg")[0].split(" ").pop());
+              const dosisTotal = (dosisMgKg * peso).toFixed(1);
+              const concentracion = parseFloat(pres.concentracion.split(" mg")[0]);
+              const tabletasPorDosis = (dosisTotal / concentracion).toFixed(2);
+              
+              dosisInfo += `
+                <div class="dosis-calculada">
+                  <strong>DOSIS CALCULADA PARA ${peso} kg:</strong><br>
+                  ${dosisTotal} mg/dosis (${tabletasPorDosis} tabletas de ${pres.concentracion})<br>
+                  <strong>Frecuencia:</strong> ${pres.dosisNiño.split("dividido en")[1] || "consultar"}
+                </div>`;
+            }
+          }
+        } 
+        else {
+          dosisInfo = `<span class="dosis-calculo">Dosis adulto: ${pres.dosisAdulto}</span>`;
+        }
+        
+        item.innerHTML = `
+          <strong>${medicamento.split("(")[0].trim()} - ${pres.forma} ${pres.concentracion}</strong><br>
+          ${dosisInfo}<br>
+          <strong>Duración:</strong> ${pres.duracion}<br>
+          <strong>Efectos adversos:</strong> ${pres.efectosAdversos}<br>
+          <strong>Contraindicaciones:</strong> ${pres.contraindicaciones}<br>
+          <strong>Notas:</strong> ${pres.notas}
+        `;
+        
+        presentacionesContainer.appendChild(item);
+      });
+    }
+  }
+
+  // Inicializar
+  toggleCampos();
+</script>
+
+</body>
+</html>
