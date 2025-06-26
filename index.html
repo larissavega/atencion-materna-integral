@@ -5169,7 +5169,9 @@ El puerperio es el período que empieza después del parto y se extiende hasta l
             document.querySelectorAll('.tab-button').forEach(button => {
                 button.addEventListener('click', () => {
                     const tabId = button.getAttribute('data-tab'); // Obtener el ID de la pestaña del atributo data-tab
-                    if (tabId) { // Only process if it's a real tab button with a data-tab attribute
+                    if (tabId) { 
+                        // Reset the state of all tabs to ensure a clean slate
+                        resetAllTabs();
                         document.querySelectorAll('.tab-button').forEach(btn => {
                             if (btn.hasAttribute('data-tab')) btn.classList.remove('active'); // Usar hasAttribute para ser más específico
                         });
@@ -6487,7 +6489,51 @@ El puerperio es el período que empieza después del parto y se extiende hasta l
             container.innerHTML = content;
         }
 
-        
+        function resetAllTabs() {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                // Reset all form elements to their default state
+                const inputs = tab.querySelectorAll('input, select');
+                inputs.forEach(input => {
+                    switch (input.type) {
+                        case 'checkbox':
+                            // The default for 'ciclo-regular' is checked, others are unchecked
+                            input.checked = (input.id === 'ciclo-regular');
+                            break;
+                        case 'number':
+                            // The default for 'dias-usg' is 0, others are empty
+                            input.value = (input.id === 'dias-usg') ? '0' : '';
+                            break;
+                        case 'date':
+                        case 'text':
+                            input.value = '';
+                            break;
+                        case 'select-one': // For <select>
+                            input.selectedIndex = 0;
+                            break;
+                    }
+                });
+
+                // Hide all specific result/dynamic content divs
+                const dynamicContent = tab.querySelectorAll(
+                    '#bloque-preconcepcion, #anexos-section, ' +
+                    '#resultado-calculadora, #resultado-controles, #bloque-plan-prenatal, ' +
+                    '#resultado-edad, #content-by-age-group > div, ' +
+                    '#vacunas-por-edad, ' +
+                    '.card[id$="-details"]' // Selects all disease detail cards
+                );
+                dynamicContent.forEach(div => div.classList.add('hidden'));
+
+                // Collapse all collapsible contents
+                const collapsibles = tab.querySelectorAll('.collapsible-content.expanded, .contenido-card:not(.hidden)');
+                collapsibles.forEach(collapsible => {
+                    collapsible.classList.remove('expanded');
+                    collapsible.classList.add('hidden');
+                });
+
+                const duracionCicloContainer = document.getElementById('duracion-ciclo-container');
+                if (duracionCicloContainer) duracionCicloContainer.classList.add('hidden');
+            });
+        }
     </script>
 </body>
 </html>
