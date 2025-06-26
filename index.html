@@ -196,30 +196,26 @@
             padding-bottom: 0.5rem;
         }
         .logo-container {
-            position: fixed; /* Fija el logo en la pantalla */
-            top: 1rem;       /* 16px desde arriba */
-            left: 1rem;      /* 16px desde la izquierda */
-            z-index: 100;    /* Asegura que esté sobre el contenido pero debajo de modales */
+            display: none; /* Oculta el logo fijo */
         }
 
         .logo-container img {
-            width: 80px;     /* Ancho del logo */
-            height: auto;    /* Altura automática para mantener la proporción */
+            width: 200px;
             border-radius: 50%; /* Opcional: para un logo circular */
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Sombra suave opcional */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave opcional */
         }
     </style>
 </head>
 <body class="p-6 max-w-4xl mx-auto">
-    <div class="logo-container">
-        <!-- Reemplaza 'ruta/a/tu/logo.png' con la ubicación real de tu imagen -->
-        <img src="imagenes/anexos/dra.png" alt="Logo de la Clínica">
     </div>
     <div id="message-box" class="hidden"></div>
 
     <header class="mb-8 text-center">
-        <h1 class="text-3xl font-bold" style="color: var(--verde-oliva);">Atención Materna-Infantil Integral</h1>
-        <p class="mt-2" style="color: var(--verde-salvia);">Seguimiento del embarazo, cuidados prenatales y antención infantil</p>
+        <div class="flex items-center justify-center">
+            <img src="imagenes/anexos/dra1.png" alt="Logo de la Clínica" class="w-24 h-auto mr-4">
+            <h1 class="text-3xl font-bold" style="color: var(--verde-oliva);">Atención Materna-Infantil Integral</h1>
+        </div>
+        <p style="color: var(--verde-salvia);">Seguimiento del embarazo, cuidados prenatales y antención infantil</p>
     </header>
 
     <div class="tabs-container">
