@@ -200,7 +200,7 @@
         }
 
         .logo-container img {
-            width: 200px;
+            width: 300px;
             border-radius: 20%; /* Opcional: para un logo circular */
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra suave opcional */
         }
@@ -3141,61 +3141,93 @@ PROTOCOLO PARTO EXTRAHOSPITALARIO
                 </div>
 
                 <div id="varicela-details" class="card bg-white rounded shadow mb-4 hidden">
-                    <button onclick="toggleContenido(this)" class="w-full text-left px-4 py-2 font-semibold bg-blue-100 hover:bg-blue-200 rounded-t-lg">
-                        Detalles de Varicela
-                    </button>
-                    <div class="contenido-card hidden px-4 py-2 text-sm">
-                        <h3 class="font-semibold text-lg mt-2 mb-2" style="color: var(--verde-oliva);">Varicela</h3>
-                        <p>La varicela es una enfermedad causada por la primoinfección del virus varicela-zóster. Su manifestación inicial es la varicela, mientras que el zóster (culebrilla) representa las recurrencias del mismo virus.</p>
+    <button onclick="toggleContenido(this)" class="w-full text-left px-4 py-2 font-semibold bg-blue-100 hover:bg-blue-200 rounded-t-lg">
+        Detalles de Varicela
+    </button>
+    <div class="contenido-card hidden px-4 py-2 text-sm">
+        <h3 class="font-semibold text-lg mt-2 mb-2" style="color: var(--verde-oliva);">Varicela</h3>
+        <p>La varicela es una infección viral aguda, muy contagiosa, causada por el virus varicela-zóster (VVZ), del grupo Herpesvirus. Se manifiesta con fiebre, malestar general, prurito y una erupción cutánea característica con vesículas rodeadas de un halo rojo.</p>
 
-                        <h4 class="font-semibold mt-3 mb-1">Manifestaciones Clínicas</h4>
-                        <p>El periodo prodrómico (inicial) dura 2-3 días y se caracteriza por:</p>
-                        <ul class="list-disc pl-5 space-y-1">
-                            <li>Fiebre leve a moderada.</li>
-                            <li>Malestar general.</li>
-                            <li>Faringitis (dolor de garganta).</li>
-                        </ul>
-                        <p class="mt-2">Luego aparece un exantema generalizado (erupción en la piel), que evoluciona de forma independiente en cada lesión a través de las fases: mácula, pápula, vesícula, y costra.</p>
-                        <ul class="list-disc pl-5 space-y-1 mt-2">
-                            <li>Inicia en el tórax y se extiende al resto del cuerpo, incluyendo el cuero cabelludo.</li>
-                            <li>Suele ser muy pruriginoso (produce mucha picazón), lo que puede llevar a lesiones por rascado y sobreinfección bacteriana.</li>
-                            <li>Generalmente, las manifestaciones sistémicas son leves o inexistentes.</li>
-                            <li>Puede haber úlceras pequeñas en la mucosa oral y genital.</li>
-                        </ul>
-                        <p class="mt-2">Las complicaciones son poco frecuentes pero pueden incluir:</p>
-                        <ul class="list-disc pl-5 space-y-1">
-                            <li>Afectación del sistema nervioso central.</li>
-                            <li>Neumonías.</li>
-                            <li>Presencia de hemorragias.</li>
-                            <li>Síndrome de Reye.</li>
-                            <li>Artritis poliarticulares.</li>
-                        </ul>
+        <h4 class="font-semibold mt-3 mb-1">Epidemiología</h4>
+        <ul class="list-disc pl-5 space-y-1">
+            <li><strong>Agente causal:</strong> Virus varicela-zóster (herpesvirus humano tipo 3).</li>
+            <li><strong>Reservorio:</strong> Humano.</li>
+            <li><strong>Transmisión:</strong> Contacto directo, gotitas respiratorias, vía aérea o superficies contaminadas. No contagian las costras.</li>
+            <li><strong>Periodo de contagio:</strong> Desde 2-3 días antes hasta 5-6 días después del inicio del exantema.</li>
+            <li><strong>Periodo de incubación:</strong> 10 a 21 días (comúnmente entre 14 y 16 días).</li>
+            <li><strong>Distribución:</strong> Mundial, más frecuente en invierno. Afecta principalmente a niños antes de los 15 años.</li>
+        </ul>
 
-                        <h4 class="font-semibold mt-3 mb-1">Diagnóstico</h4>
-                        <p>El diagnóstico de la varicela es eminentemente clínico, es decir, se basa en los signos y síntomas observados por el médico.</p>
+        <h4 class="font-semibold mt-3 mb-1">Manifestaciones Clínicas</h4>
+        <p>El cuadro clínico se caracteriza por fiebre y una erupción máculo-pápulo-vesicular que evoluciona en fases:</p>
+        <ul class="list-disc pl-5 space-y-1">
+            <li>Aparición de 250 a 500 lesiones en diferentes etapas (mácula, pápula, vesícula, costra).</li>
+            <li>Distribución centrípeta (tronco, cara, cuero cabelludo, mucosas, axilas).</li>
+            <li>Las lesiones aparecen por brotes sucesivos durante 3 a 7 días.</li>
+            <li>Mayor gravedad en zonas irritadas como por pañal o quemaduras solares.</li>
+        </ul>
 
-                        <h4 class="font-semibold mt-3 mb-1">Manejo Terapéutico</h4>
-                        <p>El tratamiento de la varicela se centra en el manejo de los síntomas:</p>
-                        <ul class="list-disc pl-5 space-y-1">
-                            <li>Acetaminofén: 10 a 15 mg/Kg/dosis cada 4 o 6 horas, para controlar la fiebre. Es fundamental evitar el uso de salicilatos (como la aspirina) debido al riesgo de Síndrome de Reye.</li>
-                            <li>Antihistamínicos: Clorfeniramina 3.5 mg/Kg/día, dividida en 3 dosis durante 5 días, para aliviar el prurito.</li>
-                            <li>En caso de infecciones sobreagregadas (bacterianas por rascado), se debe considerar el uso de antibióticos.</li>
-                        </ul>
+        <h4 class="font-semibold mt-3 mb-1">Diagnóstico</h4>
+        <p>El diagnóstico de la varicela es clínico y se basa en los síntomas y características de la erupción. No se requieren pruebas de laboratorio.</p>
 
-                        <h4 class="font-semibold mt-3 mb-1">Educación en Salud</h4>
-                        <p>Es importante tomar las siguientes medidas:</p>
-                        <ul class="list-disc pl-5 space-y-1">
-                            <li>Limitar el contacto del paciente enfermo con personas susceptibles para evitar la propagación.</li>
-                            <li>Recomendar el lavado de manos y el recorte de uñas para prevenir excoriaciones (lesiones por rascado) y sobreinfecciones.</li>
-                        </ul>
+        <h4 class="font-semibold mt-3 mb-1">Tratamiento</h4>
+        <p>El tratamiento es sintomático, enfocado en aliviar los síntomas y prevenir complicaciones:</p>
+        <ul class="list-disc pl-5 space-y-1">
+            <li>Control de la fiebre (paracetamol, nunca aspirina).</li>
+            <li>Antihistamínicos para la picazón.</li>
+            <li>Evitar el rascado para prevenir sobreinfección.</li>
+            <li>Uso de aciclovir en pacientes de alto riesgo si se da en las primeras 24 h.</li>
+        </ul>
 
-                        <h4 class="font-semibold mt-3 mb-1">Criterios de Riesgo y Referencia</h4>
-                        <ul class="list-disc pl-5 space-y-1">
-                            <li>Pacientes de riesgo: Aquellos inmunocomprometidos o con enfermedades crónicas deben tener especial atención.</li>
-                            <li>Criterios de referencia: Se debe referir al paciente a un nivel de atención superior si presenta complicaciones o si se trata de un paciente con inmunodeficiencias o enfermedades crónicas.</li>
-                        </ul>
-                    </div>
-                </div>
+        <h4 class="font-semibold mt-3 mb-1">Prevención</h4>
+        <ul class="list-disc pl-5 space-y-1">
+            <li>Aislamiento del paciente hasta que todas las lesiones estén en costra.</li>
+            <li>Desinfección de objetos contaminados.</li>
+            <li>Vacunación con virus vivo atenuado desde los 12 meses de edad.</li>
+        </ul>
+
+        <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%; font-family: Arial, sans-serif;" class="mt-4">
+            <thead style="background-color: #cce5ff;">
+                <tr>
+                    <th>Aspecto</th>
+                    <th>Detalles principales</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Tratamiento general</strong></td>
+                    <td>Sintomático, control de fiebre y picazón, evitar sobreinfección, Acetaminofén: 10 a 15 mg/Kg/dosis cada 4 o 6 horas, para controlar la fiebre. Es fundamental evitar el uso de salicilatos (como la aspirina) debido al riesgo de Síndrome de Reye.
+Antihistamínicos: Clorfeniramina 3.5 mg/Kg/día, dividida en 3 dosis durante 5 días, para aliviar el prurito.
+En caso de infecciones sobreagregadas (bacterianas por rascado), se debe considerar el uso de antibióticos.</td>
+                </tr>
+                <tr>
+                    <td><strong>Antiviral (aciclovir)</strong></td>
+                    <td>Para personas en riesgo, dentro de las primeras 24 h del brote.</td>
+                </tr>
+                <tr>
+                    <td><strong>Personas en riesgo</strong></td>
+                    <td>Niños &lt;1 año, personas &gt;12 años no vacunadas, enfermedades crónicas, uso prolongado de esteroides/salicilatos.</td>
+                </tr>
+                <tr>
+                    <td><strong>Vacunación postexposición</strong></td>
+                    <td>Entre 3 a 5 días tras contacto con enfermo. Previene o reduce la gravedad.</td>
+                </tr>
+                <tr>
+                    <td><strong>Complicaciones</strong></td>
+                    <td>El médico indicará el tratamiento según cada caso (ej. neumonía, encefalitis, etc.).</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h4 class="font-semibold mt-3 mb-1">Recomendaciones adicionales</h4>
+        <ul class="list-disc pl-5 space-y-1">
+            <li>Evitar contacto con personas inmunosuprimidas o no vacunadas.</li>
+            <li>Buena higiene: lavado de manos, recorte de uñas.</li>
+            <li>Consultar al médico ante signos de complicación o fiebre persistente.</li>
+        </ul>
+    </div>
+</div>
+
 
                 <div id="dermatitis-panal-details" class="card bg-white rounded shadow mb-4 hidden">
                     <button onclick="toggleContenido(this)" class="w-full text-left px-4 py-2 font-semibold bg-blue-100 hover:bg-blue-200 rounded-t-lg">
